@@ -1,5 +1,7 @@
 *.swp
 venv
-tags
 .vscode
-
+.idea
+tmp
+tags
+*.py[cod]

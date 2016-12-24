@@ -1,6 +1,11 @@
 # SpaceInvaders
-A space invader like arcade shooter in pygame
+A space invader like arcade shooter written in python2.7 using pygame
 
 ### Requirements
-* Python3
+* Python2
 * Pygame 1.9.2
+
+<hr>
+
+### Special thanks
+www.kenney.nl
