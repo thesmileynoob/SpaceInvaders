@@ -6,19 +6,25 @@ Helper to track position
 
 class Position(object):
 
-    def __init__(self, x, y, z=0):
+    def __init__(self, coordinates):
         """
         Initialize the position
-        :rtype: Position
-        :param x: int x-coordinate
-        :param y: int y-coordinate
-        :param z: int z-coordinate
+        :param coordinates: tuple(int,int,int) coordinates
         """
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = coordinates
 
-    def update(self, new_x, new_y, new_z=0):
+    def __repr__(self):
+        return f"<Position>\n"\
+                "({self.x}, {self.y}, {self.z})\n"
+
+    def get(self):
+        """ 
+        Return 2-d the position tuple 
+        :return: tuple(int x, int y) 
+        """
+        return self.x, self.y
+
+    def set_to(self, new_x, new_y, new_z=0):
         """
         Updates the position given x, y, z
         :type new_x: int
@@ -29,14 +35,13 @@ class Position(object):
         self.y = new_y
         self.z = new_z
 
-    def update_delta(self, delta_x, delta_y, delta_z=0):
+    def update_by(self, delta_x, delta_y):
         """
         Updates the position from deltas
         :param delta_x: int
         :param delta_y: int
-        :param delta_z: int
         :return: None
         """
         self.x += delta_x
         self.y += delta_y
-        self.z ++ delta_z
+

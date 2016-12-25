@@ -9,8 +9,12 @@ class Health(object):
     Health is a combination of Shield and native health.
     The object takes damage in that order.
     """
+    _HEALTH = 100
+    _SHIELD = 0
+    _MAXHEALTH = 100
+    _MAXSHIELD = 100
 
-    def __init__(self, health=100, shield=0, max_health=100, max_shield=100):
+    def __init__(self, health=_HEALTH, shield=_SHIELD, max_health=_MAXHEALTH, max_shield=_MAXSHIELD):
         """
         :param health: int The health of an object (default 100)
         :param shield: int The total shield of an object (default 0)
@@ -22,6 +26,12 @@ class Health(object):
         self.max_health = max_health
         self.max_shield = max_shield
         self.shield_disabled = False
+
+    def __repr__(self):
+        return f"<Health>\n"\
+                "health: {self.health}\n"\
+                "shield: {self.shield}\n"\
+                "max: {self.max_health, self.max_shield}\n"
 
     def decrease_by(self, damage):
         """
