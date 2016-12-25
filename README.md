@@ -1,11 +1,27 @@
 # SpaceInvaders
-A space invader like arcade shooter written in python2.7 using pygame
+A space invader like arcade shooter written in python36 using pygame
+
+### Installation
+1. Install [Pygame](http://www.pygame.org/)
+```
+pip install pygame
+```
+2. Clone the repo
+```
+git clone "https://github.com/thesmileynoob/SpaceInvaders.git"
+```
+3. Run app.py
+```
+python app.py
+```
 
 ### Requirements
-* Python2
+* Python 3.6
 * Pygame 1.9.2
+* Linux
 
 <hr>
 
 ### Special thanks
-www.kenney.nl
+Resources
+- [Kenny](http://www.kenny.nl/) for ships, lasers and obstacles
