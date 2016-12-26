@@ -1,32 +1,42 @@
 """
 The main loop of the game 
 """
+import pdb
 import sys
 import time
 import pygame
-from .CONFIG import CONFIG
-import pdb
 
-from .components.ships.ship import Ship
+from .CONFIG import CONFIG
+from .components.levels.level0 import Level0
+from .components.ships.player import Player
+
 
 
 def setup_window():
     pygame.init()
     pygame.display.set_caption(CONFIG.window_title)
 
-
+def render(level):
+    """ Render all items """
+    level.render()
 
 
 def start_game():
     """
     Initialize pygame, check saved files, and run the main loop
     """
+    screen = pygame.display.set_mode(CONFIG.window_size)
+    #########  GLOBAL SETUP
     clock = pygame.time.Clock()
     setup_window()
-    screen = pygame.display.set_mode(CONFIG.window_size)
-    ship = Ship()
+    #########
 
-    ship.get_position()
+    ####### LEVEL Setup
+    # ship = Player()
+    level = Level0()
+    ship = level.player
+    #######
+
     def reset():
         return Ship("resources/ships/playership.png", (140, 400, 0), "hero")
     quit = False
@@ -69,13 +79,14 @@ def start_game():
             else:
                 ship.move_by(0, 5)
         if keys[pygame.K_SPACE]:
-            print("Pew pew pew..")
+            ship.fire1()
 
         ship.move_by(0,0.1)
         screen.fill((0,0,0))
-        screen.blit(ship.render(), ship.get_position())
-        pygame.display.flip()
-
+        x, y = level.render()
+        for yy in y:
+            screen.blit(x, yy)
+        screen.blit(*ship.render())
         pygame.display.flip()
         clock.tick(60)
     pass
