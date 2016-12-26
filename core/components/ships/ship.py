@@ -26,7 +26,7 @@ class Ship(object):
         :param spawn_position: tuple(int x, int y, int z)
         :param health: tuple(int health, int shield, int max_health, int max_shield)
         """
-        self.image = pygame.image.load(image).convert()
+        self.image = pygame.image.load(image).convert_alpha()
         self.position = Position(spawn_position)
         self.name = name
         self.health = Health(health)
@@ -60,9 +60,18 @@ class Ship(object):
         self.angle += degrees
         return 
 
+    def fire1(self):
+        """ Fire weapon1 if present """
+        if(self.weapon1):
+            weapon1.fire1()
+        else:
+            print("pew pew pew")
+        return 
+
     def render(self):
         """
         Ship render method
-        :return: pygame.Surface
+        :return: (pygame.Surface, (x,y)) tuple
         """
-        return self.image
+        return self.image, self.get_position()
+
