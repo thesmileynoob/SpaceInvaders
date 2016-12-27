@@ -5,3 +5,4 @@ venv
 tmp
 tags
 *.py[cod]
+.ipynb_*
