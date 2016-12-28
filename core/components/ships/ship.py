@@ -63,7 +63,7 @@ class Ship(object):
     def fire1(self):
         """ Fire weapon1 if present """
         if(self.weapon1):
-            weapon1.fire1()
+            self.weapon1.fire()
         else:
             print("pew pew pew")
         return 

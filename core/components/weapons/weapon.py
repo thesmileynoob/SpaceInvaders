@@ -15,6 +15,7 @@ class Weapon(object):
         self.image = pygame.image.load(image).convert_alpha() 
         self.ammo_count = ammo_count
         self.sound = sound 
+        self.position = 10,10
 
     def fire(self):
         """ Fire the weapon """
@@ -28,5 +29,5 @@ class Weapon(object):
 
     def render(self):
         """ Render the weapon """
-        pass
+        return self.image, self.position
 

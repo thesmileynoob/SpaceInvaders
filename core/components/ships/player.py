@@ -31,11 +31,18 @@ class Player(Ship):
         self.drag = drag
         Q.register(self.on_message)
         self.send_message = Q.send_message
+        self.equippedWeapon = weapon1
+        print("initcled")
 
     def render(self):
         """ Public """
+        self.image2 = self.image.copy()
         self.move_by(*self.drag) # Always apply drag movement
-        return super(Player, self).render()
+        if self.equippedWeapon != None:
+            self.image2.blit(*self.weapon1.render())
+            return self.image2, self.get_position()
+        else:
+            return self.image, self.get_position()
 
     def on_message(self, message):
         """ React to the event """
@@ -75,3 +82,14 @@ class Player(Ship):
                 self.move_by(0, 5)
         if keys[pygame.K_SPACE]:
             self.fire1()
+        if keys[pygame.K_e]:
+            print("removing weapon")
+            self.equippedWeapon = None
+            # if self.equippedWeapon:
+                # print("removing weapon")
+                # self.equippedWeapon = None
+            # else:
+                # print("equipping weapon")
+                # self.equippedWeapon = self.weapon1
+            
+
