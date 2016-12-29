@@ -15,7 +15,7 @@ class Position(object):
 
     def __repr__(self):
         return f"<Position>\n"\
-                "({self.x}, {self.y}, {self.z})\n"
+                f"({self.x}, {self.y}, {self.z})\n"
 
     def get(self):
         """ 

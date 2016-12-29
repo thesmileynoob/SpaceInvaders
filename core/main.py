@@ -7,10 +7,10 @@ import time
 import pygame
 
 from .CONFIG import CONFIG
+from .specials.chaos import ChaosMaker
+from .specials.messaging import MessageMaker, MessageQueue
 from .components.levels.level0 import Level0
 from .components.ships.player import Player
-from .event import EventMaker
-from .messagequeue import MessageQueue
 
 
 
@@ -31,13 +31,13 @@ def start_game():
     #########  GLOBAL SETUP
     clock = pygame.time.Clock()
     setup_window()
-    event_maker = EventMaker()
+    message_maker = MessageMaker()
     Q = MessageQueue()
-    EM = EventMaker()
+    chaos = ChaosMaker()
+    Q.register(chaos.on_message)
     #########
 
     ####### LEVEL Setup
-    # ship = Player()
     level = Level0(Q)
     ship = level.player
     #######
@@ -61,7 +61,7 @@ def start_game():
                 if event.key == 27: quit = True  # "Esc" -> quit
                 if event.key == 114: ship = reset() # "R" -> reset level
         # Messaging
-        Q.send_message(EM.tick_event(1, pygame.key.get_pressed())) 
+        Q.send_message(message_maker.tick_message(1, pygame.key.get_pressed())) 
         Q.dispatch()
 
         screen.fill((0,0,0))
@@ -69,6 +69,8 @@ def start_game():
         for yy in y:
             screen.blit(x, yy)
         screen.blit(*ship.render())
+
+        chaos.render(screen)
 
         # FPS
         if time.time() - time1 >= 1: 
