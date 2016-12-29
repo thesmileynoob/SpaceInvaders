@@ -19,7 +19,7 @@ class Ship(object):
     _IMAGE = "res/ships/ship_generic.png"
     _SPAWNPOSITION = (0,0,0)
 
-    def __init__(self, name='Generic', image=_IMAGE, spawn_position=_SPAWNPOSITION, health=None):
+    def __init__(self, name, image, spawn_position, health, weapon1):
         """
         :param name: str Name of the ship
         :param image: str image name
@@ -30,12 +30,14 @@ class Ship(object):
         self.position = Position(spawn_position)
         self.name = name
         self.health = Health(health)
+        self.weapon1 = weapon1
 
 
     def __repr__(self):
         return f"<Ship>\n"\
                 "Name: {self.name}\n" \
                 "Health: {self.health}\n" \
+                "Weapon1: {self.weapon1}\n"\
                 "Position: {self.position}\n"
 
     def move_by(self, vel_x, vel_y):
@@ -60,10 +62,10 @@ class Ship(object):
         self.angle += degrees
         return 
 
-    def fire1(self):
+    def fire1(self, position):
         """ Fire weapon1 if present """
         if(self.weapon1):
-            self.weapon1.fire()
+            self.weapon1.fire(position)
         else:
             print("pew pew pew")
         return 

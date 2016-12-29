@@ -24,8 +24,7 @@ class Player(Ship):
         :param weapon3: `Weapon` Special weapon
         :param boost: `Boost` Turbo boost!
         """
-        super(Player, self).__init__(name='Player', image=image, spawn_position=spawn_position, health=health)
-        self.weapon1 = weapon1
+        super(Player, self).__init__(name='Player', image=image, spawn_position=spawn_position, health=health, weapon1=weapon1)
         self.weapon2 = weapon2
         self.weapon3 = weapon3
         self.drag = drag
@@ -46,8 +45,11 @@ class Player(Ship):
 
     def on_message(self, message):
         """ React to the event """
-        self._on_input(message["keys"])
-        return
+        if(message.receiver == "all"):
+            self._on_input(message.payload["keys"])
+            return
+        else:
+            return
 
     def _on_input(self, keys):
         """ Handle input """
@@ -81,7 +83,9 @@ class Player(Ship):
             else:
                 self.move_by(0, 5)
         if keys[pygame.K_SPACE]:
-            self.fire1()
+            x, y = self.get_position()
+            z = 0
+            self.fire1((x, y, z))
         if keys[pygame.K_e]:
             print("removing weapon")
             self.equippedWeapon = None
