@@ -8,20 +8,13 @@ from ..ships.player import Player
 class Level(object):
     """
     The base Level class
-    - Number
-    - Ships
-    - Environment
-    - Sound etc
+    - name
+    - player
+    - ships
+    - environment 
     """
-    _NAME = "Generic Level"
-    _PLAYER = Player
-    _SHIPS=[]
-    _ENV={
-            "bg": "res/backgrounds/level_generic.png",
-            "objects": []
-            }
 
-    def __init__(self, name=_NAME, player=_PLAYER, ships=_SHIPS, environment=_ENV):
+    def __init__(self, name, player, ships, environment):
         """ 
         :param name: str The level name 
         :param player: `Player` Player ship
