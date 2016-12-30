@@ -1,6 +1,7 @@
 """
 The projectile/destruction handler
 """
+import time
 import pygame
 from ..components.utils.position import Position
 
@@ -23,28 +24,33 @@ class ChaosMaker(object):
         """
         self.limit = limit
         self.refs = []
-        self.refnames = []
 
     def on_message(self, message):
+        if message.receiver == "all":
+            if message.payload["type"] == "tick":
+                self._tick()
         if message.receiver == "chaosmaker":
-            self.create_chaos(message.payload)
+            if message.payload["type"] == "create":
+                self._create_chaos(message.payload)
+
+    def _tick(self):
+        """ Managers/makers dont tick"""
+        if len(self.refs) == 0:
+            return
+        for ref in self.refs:
+            ref.tick()
+            if ref.position.y < 0:
+                del self.refs[self.refs.index(ref)]
+        return
 
     def render(self, screen):
         """ Render every object """
         for ref in self.refs:
             screen.blit(*ref.render())
         
-    def create_chaos(self, spec):
+    def _create_chaos(self, spec):
         """ Create chaos according to spec """
-        # if len(self.refs) > self.limit:
-            # pass
-        # if spec["name"] in self.refnames: 
-            # print("duplicate")
-        # else:
-        if True:
-            self.refs.append(Chaos(spec)) 
-            self.refnames.append(spec["name"])
-        pass
+        self.refs.append(Chaos(spec)) 
 
 class Chaos(object):
     """ The chaos object for creating chaos!
@@ -65,15 +71,21 @@ class Chaos(object):
         self.target = specs["target"]
         self.anim_start = specs["anim_start"]
         self.anim_end = specs["anim_end"]
+
+    def tick(self):
+        self.position.update_by(*self.velocity)
     
     def render(self):
-        self.position.update_by(*self.velocity)
         return self.image, self.position.get()
 
     def on_message(self, message):
-        if message.receiver == "all":
-            pass
+        if message.receiver == "world":
+            if message.payload["type"] == "tick":
+                self._tick()
+        elif message.receiver == "chaosmaker":
+            if message.payload["type"] == "create":
+                self._create_chaos(message.payload)
 
-    def _destruct(self):
+    def __del__(self):
         """ Self destruct """
         pass
