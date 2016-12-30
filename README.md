@@ -1,5 +1,6 @@
-# SpaceInvaders
-A space invader like arcade shooter written in python36 using pygame
+# SpaceTrek
+*Still heavily under development*
+A space invader like arcade shooter written in python36 using pygame to serve as an easy to understand example for beginners.
 
 ### Installation
 1. Install [Pygame](http://www.pygame.org/)
