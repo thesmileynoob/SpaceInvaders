@@ -64,13 +64,13 @@ def start_game():
         Q.send_message(message_maker.tick_message(1, pygame.key.get_pressed())) 
         Q.dispatch()
 
-        screen.fill((0,0,0))
+        
+        # Render order: Level -> chaos -> ships
         x, y = level.render()
         for yy in y:
             screen.blit(x, yy)
-        screen.blit(*ship.render())
-
         chaos.render(screen)
+        screen.blit(*ship.render())
 
         # FPS
         if time.time() - time1 >= 1: 
