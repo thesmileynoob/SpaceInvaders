@@ -48,8 +48,8 @@ class MessageMaker(object):
     def tick_message(id, keys):
         """ Game tick message passed on every loop """
         message = Message("world", "all", {
+            "type": "tick",
             "keys": keys,
-            "gamesettings": 1
             })
         return message
 
