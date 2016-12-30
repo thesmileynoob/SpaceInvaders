@@ -50,6 +50,17 @@ class Ship(object):
         self.position.update_by(vel_x, vel_y)
         return
 
+    def render(self):
+        """
+        Ship render method
+        :return: (pygame.Surface, (x,y)) tuple
+        """
+        return self.image, self.get_position()
+
+    def _tick(self, payload):
+        self.move_by(*self.drag)
+        self._on_input(payload["keys"])
+
     def get_position(self):
         """ Return a position tuple """
         return self.position.get()
@@ -69,11 +80,4 @@ class Ship(object):
         else:
             print("pew pew pew")
         return 
-
-    def render(self):
-        """
-        Ship render method
-        :return: (pygame.Surface, (x,y)) tuple
-        """
-        return self.image, self.get_position()
 
