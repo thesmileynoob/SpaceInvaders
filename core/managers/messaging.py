@@ -10,14 +10,14 @@ class MessageQueue(object):
     def __init__(self):
         self.observers = []  # Hold all the refs
         self.queue = [] # The message queue
-    
+
     def register(self, observer):
         """
         Register all observers/listeners
         :param observer: any object with an on_message method
         """
         self.observers.append(observer)
-    
+
     def send_message(self, message):
         """
         Add a message to the queue
@@ -33,7 +33,7 @@ class MessageQueue(object):
                 for observer in self.observers:
                     observer(message)
             self.queue = [] # Empty the queue
-                
+
 
 
 class MessageMaker(object):
@@ -50,6 +50,14 @@ class MessageMaker(object):
         message = Message("world", "all", {
             "type": "tick",
             "keys": keys,
+            })
+        return message
+
+    @staticmethod
+    def render_message():
+        """ Render message passed on every loop """
+        message = Message("world", "all", {
+            "type": "render",
             })
         return message
 

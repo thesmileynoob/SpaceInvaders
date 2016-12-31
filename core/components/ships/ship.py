@@ -48,6 +48,11 @@ class Ship(object):
         :param vel_y: int change in y coordinate
         :return: None
         """
+        message = Message("ship", "weapon", {
+            "type": "position_update",
+            "position": self._get_position()
+            })
+        self._send_message(message)
         self.position.update_by(vel_x, vel_y)
         return
 

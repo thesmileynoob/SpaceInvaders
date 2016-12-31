@@ -55,11 +55,19 @@ class Weapon(object):
             self._send_message(message)
             return 
 
-    def render(self):
+    def _render(self):
         """ Render the weapon """
-        return self.image, self.position
+        message = Message("weapon", "renderer", {
+            "type": "render",
+            "image": self.image,
+            "position": self.position
+            })
+        self._send_message(message)
 
     def on_message(self, message):
+        if message.receiver == "all":
+            if message.payload["type"] == "render":
+                self._render()
         if message.receiver == "weapon":
             if message.payload["type"] == "fire":
                 self._fire(message.payload)

@@ -17,11 +17,13 @@ class ChaosMaker(object):
     target
     """
 
-    def __init__(self, limit=10):
+    def __init__(self, Q, limit=10):
         """ 
         Manages all the chaos on the screen 
+        :param Q: 
         :param limit: int maximum number of objects on the screen
         """
+        Q.register(self.on_message)
         self.limit = limit
         self.refs = []
 

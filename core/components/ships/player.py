@@ -3,6 +3,7 @@ The player ship
 """
 
 import pygame
+from ...managers.messaging import Message
 from .ship import Ship
 
 class Player(Ship):
@@ -31,7 +32,6 @@ class Player(Ship):
         Q.register(self.on_message)
         self._send_message = Q.send_message
         self.equippedWeapon = weapon1
-        print("initcled")
 
 
     def render(self):
@@ -41,11 +41,22 @@ class Player(Ship):
         else:
             return self.image, self._get_position()
 
+    def _render(self):
+        message = Message("player", "renderer", {
+            "type": "render",
+            "image": self.image,
+            "position": self._get_position()
+            })
+        self._send_message(message)
+        return 
+
     def on_message(self, message):
         """ React to the event """
-        if message.sender == "world":
+        if message.receiver == "all":
             if message.payload["type"] == "tick":
                 self._tick(message.payload)
+            if message.payload["type"] == "render":
+                self._render()
         else:
             pass
 
