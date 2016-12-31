@@ -3,7 +3,7 @@ The Weapon base class
 """
 import time
 import pygame
-from ...specials.messaging import Message
+from ...managers.messaging import Message
 
 class Weapon(object):
     """
@@ -15,20 +15,21 @@ class Weapon(object):
     _IMAGE="res/weapons/laser_red.png"
     def __init__(self, Q, image=_IMAGE, ammo_count=1000, sound=None):
         """ ${:TODO Docs} """
+        Q.register(self.on_message)
         self.image = pygame.image.load(image).convert_alpha() 
         self.ammo_count = ammo_count
         self.sound = sound 
         self.position = 10,10
-        self.send_message = Q.send_message
+        self._send_message = Q.send_message
         self.rate_of_fire = 10 
         self.time_last_fired = time.time()
 
-    def fire(self, position):
+    def _fire(self, payload):
         """ 
         Fire the weapon 
         :param position: tup Coordinate to fire from
         """
-        print(position)
+        position = payload["position"]
         x, y , _= position
         x = x + self.position[0] + 5
         position = (x, y, _)
@@ -51,10 +52,15 @@ class Weapon(object):
                 "anim_start": None,
                 "anim_end": None,
                 })
-            self.send_message(message)
+            self._send_message(message)
             return 
 
     def render(self):
         """ Render the weapon """
         return self.image, self.position
 
+    def on_message(self, message):
+        if message.receiver == "weapon":
+            if message.payload["type"] == "fire":
+                self._fire(message.payload)
+        pass

@@ -7,8 +7,8 @@ import time
 import pygame
 
 from .CONFIG import CONFIG
-from .specials.chaos import ChaosMaker
-from .specials.messaging import MessageMaker, MessageQueue
+from .managers.chaos import ChaosMaker
+from .managers.messaging import MessageMaker, MessageQueue
 from .components.levels.level0 import Level0
 from .components.ships.player import Player
 
