@@ -20,6 +20,7 @@ class Renderer(object):
 
     def on_message(self, message):
         if message.receiver == "renderer":
+            # print(f"{message.sender} -> {message.payload['position']}") 
             self._render(message.payload)
         pass
 
@@ -27,7 +28,7 @@ class Renderer(object):
         """ Return the rendered screen """
         image = payload["image"]
         position = payload["position"]
-        self.screen.blit(image, position)
-        print(f"<Rendering> {payload}")
+        self.screen.blit(image, position.get())
+        # print(f"<Rendering> {payload}")
         pass
 

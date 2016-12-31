@@ -4,6 +4,7 @@ The Weapon base class
 import time
 import pygame
 from ...managers.messaging import Message
+from ..utils.position import Position
 
 class Weapon(object):
     """
@@ -12,17 +13,22 @@ class Weapon(object):
         - Damage
         - Ammo
     """
-    _IMAGE="res/weapons/laser_red.png"
-    def __init__(self, Q, image=_IMAGE, ammo_count=1000, sound=None):
+    def __init__(self, Q, image, ammo_count=1000, sound=None):
         """ ${:TODO Docs} """
         Q.register(self.on_message)
         self.image = pygame.image.load(image).convert_alpha() 
         self.ammo_count = ammo_count
         self.sound = sound 
-        self.position = 10,10
+        self.position = Position((10, 10))
         self._send_message = Q.send_message
-        self.rate_of_fire = 10 
+
+        # Weapon specs
+        self.rate_of_fire = 5 
         self.time_last_fired = time.time()
+        self.offset_x = 10
+        self.offset_y = 9 
+        self.offset_ammo_x = 5 
+        self.offset_ammo_y = -50 
 
     def _fire(self, payload):
         """ 
@@ -30,9 +36,10 @@ class Weapon(object):
         :param position: tup Coordinate to fire from
         """
         position = payload["position"]
-        x, y , _= position
-        x = x + self.position[0] + 5
-        position = (x, y, _)
+        x, y = position.get()
+        x = self.position.x + self.offset_ammo_x 
+        y = self.position.y + self.offset_ammo_y 
+        new_position = Position((x,y))
 
         if self.ammo_count <= 0:
             self.ammo_count = 0
@@ -44,7 +51,7 @@ class Weapon(object):
                 "type": "create",
                 "name": "laser",
                 "image": "res/weapons/laser_red.png",
-                "position": position,
+                "position": new_position,
                 "velocity": (0, -20),
                 "drag": (0,0),
                 "rotation": 0,
@@ -54,6 +61,16 @@ class Weapon(object):
                 })
             self._send_message(message)
             return 
+    
+    def _move_to(self, position):
+        """
+        move to a position
+        :param position: tuple(x, y)
+        """
+        x, y = position.get()
+        x = x + self.offset_x
+        y = y + self.offset_y
+        self.position.set_to((x,y))
 
     def _render(self):
         """ Render the weapon """
@@ -69,6 +86,8 @@ class Weapon(object):
             if message.payload["type"] == "render":
                 self._render()
         if message.receiver == "weapon":
+            if message.payload["type"] == "update_position":
+                self._move_to(message.payload["position"])
             if message.payload["type"] == "fire":
                 self._fire(message.payload)
         pass

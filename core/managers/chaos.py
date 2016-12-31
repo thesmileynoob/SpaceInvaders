@@ -66,7 +66,7 @@ class Chaos(object):
     """
     def __init__(self, specs):
         self.image = pygame.image.load(specs["image"]).convert_alpha()
-        self.position = Position(specs["position"])
+        self.position = Position(specs["position"].get())
         self.velocity = specs["velocity"]
         self.drag = specs["drag"]
         self.rotation = specs["rotation"]
@@ -75,7 +75,7 @@ class Chaos(object):
         self.anim_end = specs["anim_end"]
 
     def tick(self):
-        self.position.update_by(*self.velocity)
+        self.position.update_by(self.velocity)
     
     def render(self):
         return self.image, self.position.get()

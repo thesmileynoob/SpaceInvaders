@@ -41,19 +41,19 @@ class Ship(object):
                 f"Weapon1: {self.weapon1}\n"\
                 f"Position: {self.position}\n"
 
-    def _move_by(self, vel_x, vel_y):
+    def _move_by(self, deltas):
         """
-        Manipulate the Position of the ship
+        Manipulate the Position of the ship and announce
         :param vel_x: int change in x coordinate
         :param vel_y: int change in y coordinate
         :return: None
         """
+        self.position.update_by(deltas)
         message = Message("ship", "weapon", {
-            "type": "position_update",
-            "position": self._get_position()
+            "type": "update_position",
+            "position": self.position
             })
         self._send_message(message)
-        self.position.update_by(vel_x, vel_y)
         return
 
     def render(self):
@@ -64,7 +64,7 @@ class Ship(object):
         return self.image, self._get_position()
 
     def _tick(self, payload):
-        self._move_by(*self.drag)
+        self._move_by(self.drag)
         self._on_input(payload["keys"])
 
     def _get_position(self):
@@ -79,12 +79,12 @@ class Ship(object):
         self.angle += degrees
         return 
 
-    def _fire_weapon(self, position):
+    def _fire_weapon(self):
         """ Fire weapons if present """
         if(self.weapon1):
             message = Message("player", "weapon", {
                 "type": "fire",
-                "position": position
+                "position": self.position
                 })
             self._send_message(message)
         else:
