@@ -18,7 +18,7 @@ class Level0(Level):
         Q.register(self.on_message)
         super(Level0, self).__init__(
                 name="Level0",
-                player=Player(Q, "res/ships/ship_player.png", spawn_position=(0,0,0), health=100, weapon1=Weapon(Q, image="res/weapons/gun_1.png", sound="Shinn!")),
+                player=Player(Q, "res/ships/ship_player.png", spawn_position=(0,0), health=100, weapon1=Weapon(Q, image="res/weapons/gun_1.png", sound="Shinn!")),
                 ships = [],
                 environment = {
                     "bg": "res/backgrounds/level_generic.png",

@@ -45,7 +45,7 @@ class Player(Ship):
         message = Message("player", "renderer", {
             "type": "render",
             "image": self.image,
-            "position": self._get_position()
+            "position": self.position
             })
         self._send_message(message)
         return 
@@ -67,40 +67,38 @@ class Player(Ship):
         VEL_DIAG = 7
         if keys[pygame.K_LEFT]:
             if keys[pygame.K_UP]:
-                self._move_by(-VEL_X, -VEL_DIAG)
+                self._move_by((-VEL_X, -VEL_DIAG))
             elif keys[pygame.K_DOWN]:
-                self._move_by(-VEL_X, VEL_DIAG)
+                self._move_by((-VEL_X, VEL_DIAG))
             else:
-                self._move_by(-VEL_X, 0)
+                self._move_by((-VEL_X, 0))
 
         elif keys[pygame.K_RIGHT]:
             if keys[pygame.K_UP]:
-                self._move_by(VEL_X, -VEL_DIAG)
+                self._move_by((VEL_X, -VEL_DIAG))
             elif keys[pygame.K_DOWN]:
-                self._move_by(VEL_X, VEL_DIAG)
+                self._move_by((VEL_X, VEL_DIAG))
             else:
-                self._move_by(VEL_X, 0)
+                self._move_by((VEL_X, 0))
 
         elif keys[pygame.K_UP]:
             if keys[pygame.K_LEFT]:
-                self._move_by(-VEL_DIAG, -VEL_Y)
+                self._move_by((-VEL_DIAG, -VEL_Y))
             elif keys[pygame.K_RIGHT]:
-                self._move_by(VEL_DIAG, -VEL_Y)
+                self._move_by((VEL_DIAG, -VEL_Y))
             else:
-                self._move_by(0, -VEL_Y)
+                self._move_by((0, -VEL_Y))
 
         elif keys[pygame.K_DOWN]:
             if keys[pygame.K_LEFT]:
-                self._move_by(-VEL_DIAG, VEL_Y)
+                self._move_by((-VEL_DIAG, VEL_Y))
             elif keys[pygame.K_RIGHT]:
-                self._move_by(VEL_DIAG, VEL_Y)
+                self._move_by((VEL_DIAG, VEL_Y))
             else:
-                self._move_by(0, VEL_Y)
+                self._move_by((0, VEL_Y))
 
         if keys[pygame.K_SPACE]:
-            x, y = self._get_position()
-            z = 0
-            self._fire_weapon((x, y, z))
+            self._fire_weapon()
 
         if keys[pygame.K_e]:
             print("removing weapon")

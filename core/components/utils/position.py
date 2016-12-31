@@ -9,13 +9,13 @@ class Position(object):
     def __init__(self, coordinates):
         """
         Initialize the position
-        :param coordinates: tuple(int,int,int) coordinates
+        :param coordinates: tuple(int,int) coordinates
         """
-        self.x, self.y, self.z = coordinates
+        self.x, self.y = coordinates
 
     def __repr__(self):
         return f"<Position>\n"\
-                f"({self.x}, {self.y}, {self.z})\n"
+                f"({self.x}, {self.y}"
 
     def get(self):
         """ 
@@ -24,24 +24,22 @@ class Position(object):
         """
         return self.x, self.y
 
-    def set_to(self, new_x, new_y, new_z=0):
+    def set_to(self, coordinates):
         """
         Updates the position given x, y, z
         :type new_x: int
         :type new_z: int
-        :type new_y: int
         """
-        self.x = new_x
-        self.y = new_y
-        self.z = new_z
+        self.x, self.y = coordinates
 
-    def update_by(self, delta_x, delta_y):
+    def update_by(self, deltas):
         """
         Updates the position from deltas
         :param delta_x: int
         :param delta_y: int
         :return: None
         """
-        self.x += delta_x
-        self.y += delta_y
+        dx, dy = deltas
+        self.x += dx
+        self.y += dy
 
