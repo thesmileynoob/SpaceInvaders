@@ -13,51 +13,68 @@ class Weapon(object):
         - Damage
         - Ammo
     """
-    def __init__(self, Q, image, ammo_count=1000, sound=None):
+    def __init__(self):
         """ ${:TODO Docs} """
-        Q.register(self.on_message)
-        self.image = pygame.image.load(image).convert_alpha() 
-        self.ammo_count = ammo_count
-        self.sound = sound 
-        self.position = Position((10, 10))
-        self._send_message = Q.send_message
+        self.name = None
+        self.image = None
+        self.ammo = None
+        self.sound = None 
+        self.position = None
 
-        # Weapon specs
-        self.rate_of_fire = 5 
-        self.time_last_fired = time.time()
-        self.offset_x = 10
-        self.offset_y = 9 
-        self.offset_ammo_x = 5 
-        self.offset_ammo_y = -50 
+        # Weapon spec
+        self.damage = None 
+        self.ammo_count = None
+        self.velocity = None
+        self.drag = None
+        self.rotation = None
+        self.target = None
+        self.rate_of_fire = None
+        self.time_last_fired = None
+        self.offset_x = None
+        self.offset_y = None
+        self.offset_ammo_x = None
+        self.offset_ammo_y = None
+        self.anim_start = None
+        self.anim_end = None
+
+        # Internal State
+        self.is_disabled = False
+
 
     def _fire(self, payload):
         """ 
         Fire the weapon 
-        :param position: tup Coordinate to fire from
+        :required payload: Position
         """
         position = payload["position"]
         x, y = position.get()
         x = self.position.x + self.offset_ammo_x 
         y = self.position.y + self.offset_ammo_y 
-        new_position = Position((x,y))
+        fire_position = Position((x,y))
+
+        if self.is_disabled:
+            return
 
         if self.ammo_count <= 0:
+            self.is_disabled = True
             self.ammo_count = 0
             return
-        elif (time.time() - self.time_last_fired) > (1/self.rate_of_fire):
+
+        if (time.time() - self.time_last_fired) > (1/self.rate_of_fire):
             self.time_last_fired = time.time()
             self.ammo_count -= 1 
             message = Message("weapon", "chaosmaker", {
                 "type": "create",
                 "name": "laser",
-                "image": "res/weapons/laser_red.png",
-                "position": new_position,
-                "velocity": (0, -20),
-                "drag": (0,0),
-                "rotation": 0,
-                "target": None,
-                "anim_start": None,
-                "anim_end": None,
+                "image": self.ammo,
+                "position": fire_position,
+                "damage": self.damage,
+                "velocity": self.velocity,
+                "drag": self.drag,
+                "rotation": self.rotation,
+                "target": self.target,
+                "anim_start": self.anim_start,
+                "anim_end": self.anim_end
                 })
             self._send_message(message)
             return 
@@ -85,9 +102,9 @@ class Weapon(object):
         if message.receiver == "all":
             if message.payload["type"] == "render":
                 self._render()
-        if message.receiver == "weapon":
-            if message.payload["type"] == "update_position":
+            if message.payload["type"] == "position.update":
                 self._move_to(message.payload["position"])
+        if message.receiver == self.name:
             if message.payload["type"] == "fire":
                 self._fire(message.payload)
         pass
