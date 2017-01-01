@@ -43,6 +43,11 @@ class Player(Ship):
         self._send_message(message)
         return 
 
+    def _tick(self, payload):
+        self._move_by(self.drag)
+        if self.name == "Player":
+            self._on_input(payload["keys"])
+
     def on_message(self, message):
         """ React to the event """
         if message.receiver == "all":

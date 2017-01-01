@@ -74,8 +74,7 @@ class Ship(object):
         return self.image, self._get_position()
 
     def _tick(self, payload):
-        self._move_by(self.drag)
-        self._on_input(payload["keys"])
+        raise NotImplementedError("Ships must implement their own _tick methods")
 
     def _get_position(self):
         """ Return a position tuple """
