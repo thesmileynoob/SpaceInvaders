@@ -31,15 +31,8 @@ class Player(Ship):
         self.drag = drag
         Q.register(self.on_message)
         self._send_message = Q.send_message
-        self.equippedWeapon = weapon1
+        self.equipped_weapon = weapon1
 
-
-    def render(self):
-        if self.equippedWeapon != None:
-            self.image.blit(*self.weapon1.render())
-            return self.image, self._get_position()
-        else:
-            return self.image, self._get_position()
 
     def _render(self):
         message = Message("player", "renderer", {
@@ -100,8 +93,15 @@ class Player(Ship):
         if keys[pygame.K_SPACE]:
             self._fire_weapon()
 
+        if keys[pygame.K_1]:
+            self._equip_weapon(1)
+        elif keys[pygame.K_2]:
+            self._equip_weapon(2)
+        elif keys[pygame.K_3]:
+            self._equip_weapon(3)
+
         if keys[pygame.K_e]:
             print("removing weapon")
-            self.equippedWeapon = None
+            self._equip_weapon(0)
             
 

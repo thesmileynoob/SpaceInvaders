@@ -43,14 +43,24 @@ class Ship(object):
 
     def _move_by(self, deltas):
         """
-        Manipulate the Position of the ship and announce
-        :param vel_x: int change in x coordinate
-        :param vel_y: int change in y coordinate
+        Manipulate the Position of the ship and announce new position
+        :param deltas: tuple(int, int) coordinate tuple
         :return: None
         """
+        if self.equipped_weapon == None:
+            # Speedboost if no weapon equipped
+            x, y = deltas
+            if x != 0:
+                if x > 0:
+                    x = x + 3
+                else:
+                    x = x - 3
+            if y != 0 and y < 0:
+                y = y - 3
+            deltas = (x, y)
         self.position.update_by(deltas)
-        message = Message("ship", "weapon", {
-            "type": "update_position",
+        message = Message("ship", "all", {
+            "type": "position.update",
             "position": self.position
             })
         self._send_message(message)
@@ -79,10 +89,26 @@ class Ship(object):
         self.angle += degrees
         return 
 
+    def _equip_weapon(self, number):
+        """ 
+        Equip a weapon. Right now, only one weapon can be equipped
+        :param number: int The weapon to be equipped
+        """
+        if number == 1:
+            self.equipped_weapon = self.weapon1
+        elif number == 2:
+            self.equipped_weapon = self.weapon2
+        elif number == 3:
+            self.equipped_weapon = self.weapon3
+        elif number == 0:
+            self.equipped_weapon = None
+
     def _fire_weapon(self):
         """ Fire weapons if present """
-        if(self.weapon1):
-            message = Message("player", "weapon", {
+        if self.equipped_weapon == None:
+            return
+        if(not self.equipped_weapon.is_disabled):
+            message = Message("player", self.equipped_weapon.name, {
                 "type": "fire",
                 "position": self.position
                 })
